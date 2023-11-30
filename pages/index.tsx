@@ -16,25 +16,41 @@ export default function Home() {
       <div>again and again</div>
       <Button>Lorem ipsum</Button>
       <ModeToggle />
-      <div className="border-2 border-red-400 border-solid p-4 flex-initial">
-        <div className="border-2 border-blue-800 border-solid">
-          Lorem ipsum
+
+      <div className="border-2 border-red-400 border-solid p-4 flex gap-1 w-screen max-w-2xl justify-center">
+        <div className="flex flex-col">
+          <div className="h-1/2 p-1 flex flex-col justify-end">
+            Frame rate :
+          </div>
+          <div className="h-1/2 p-1 flex flex-col justify-end">
+            Tempo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+          </div>
         </div>
-        <div>
-        <InputHero
-          inputMode="numeric"
-          type="number"
-          placeholder="24"
-          name="inputFps"
-          defaultValue={24}
-        />
-        <InputHero
-          inputMode="numeric"
-          type="number"
-          placeholder="128"
-          name="inputBpm"
-          defaultValue={128}
-        />
+
+        <div className="flex flex-col w-40">
+          <InputHero
+            inputMode="numeric"
+            type="number"
+            placeholder="24"
+            name="inputFps"
+            defaultValue={24}
+          />
+          <InputHero
+            inputMode="numeric"
+            type="number"
+            placeholder="128"
+            name="inputBpm"
+            defaultValue={128}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <div className="h-1/2 p-1 flex flex-col justify-end">
+            fps
+          </div>
+          <div className="h-1/2 p-1 flex flex-col justify-end">
+            bpm
+          </div>
         </div>
       </div>
     </main>
