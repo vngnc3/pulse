@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { InputBpmFps } from "@/components/ui/input-bpm-fps";
 import DynamicTitle from "@/components/TitleDynamic";
+import FourBars from "@/components/FourBars";
 
 function calculateFramesPerBeat(bpm: number, fps: number): number {
   // Check for invalid input and log an error
@@ -83,6 +84,14 @@ export default function Home() {
   const handleFpsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFps(Number(event.target.value));
   };
+  
+  const fourBarsRef = useRef<{ resetBeat: () => void }>(null);
+
+  const handleReset = () => {
+    if (fourBarsRef.current) {
+      fourBarsRef.current.resetBeat();
+    }
+  };
 
   return (
     <>
@@ -94,10 +103,16 @@ export default function Home() {
       <div>again and again</div>
       <ModeToggle />
 
+      <div className="text-2xl mt-4">
+        <FourBars ref={fourBarsRef} bpm={bpm} />
+      </div>
+
       {/* Tap and sync */}
       <div className="p-4 flex gap-1 w-screen max-w-2xl justify-center">
         <Button onClick={handleTap}>Tap</Button>
-        {/* Tap button will automatically calculate the bpm based on the interval of each clicks. After every last button click, count up to 4 seconds before resetting the interval counter. Update the bpm value at every button click. */}
+      </div>
+      <div className="p-4 flex gap-1 w-screen max-w-2xl justify-center">
+        <Button onClick={handleReset}>Resync</Button>
       </div>
 
       {/* Input */}
