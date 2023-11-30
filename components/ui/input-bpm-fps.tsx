@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const InputHero = React.forwardRef<HTMLInputElement, InputProps>(
+const InputBpmFps = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
       const input = event.target as HTMLInputElement;
@@ -26,6 +26,6 @@ const InputHero = React.forwardRef<HTMLInputElement, InputProps>(
     );
   }
 );
-InputHero.displayName = "Input";
+InputBpmFps.displayName = "Input";
 
-export { InputHero };
+export { InputBpmFps };
