@@ -4,8 +4,10 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import { InputBpmFps } from "@/components/ui/input-bpm-fps";
 
 function calculateFramesPerBeat(bpm: number, fps: number): number {
+  // Check for invalid input and log an error
   if (bpm <= 0 || fps <= 0) {
-    throw new Error("BPM and FPS must be greater than 0");
+    console.error("BPM and FPS must be greater than 0");
+    return 0;
   }
 
   // Calculate the length of a beat in seconds
@@ -16,15 +18,43 @@ function calculateFramesPerBeat(bpm: number, fps: number): number {
 
   // Return the rounded number of frames per beat
   return Math.round(framesPerBeat);
+
+  // TODO: Calculate real frames per beat, then build a logic to recommend frames pulldown
 }
 
 export default function Home() {
-  const [bpm, setBpm] = useState(128);
   const [fps, setFps] = useState(24);
-  const [framesPerBeat, setFramesPerBeat] = useState(
-    calculateFramesPerBeat(bpm, fps)
-  );
+  const [bpm, setBpm] = useState(128); // BPM set by manual input
+  const [tappedBpm, setTappedBpm] = useState(128); // BPM set by tapping
+  const [tapTimes, setTapTimes] = useState<number[]>([]);
+  const [framesPerBeat, setFramesPerBeat] = useState(calculateFramesPerBeat(bpm, fps));
   const [framesPerBar, setFramesPerBar] = useState(framesPerBeat * 4);
+
+  const handleTap = () => {
+    const now = Date.now();
+    setTapTimes(prevTimes => {
+      if (prevTimes.length > 0 && now - prevTimes[prevTimes.length - 1] > 4000) {
+        // If more than 4 seconds have passed since the last tap, reset the streak
+        return [now];
+      } else {
+        // Otherwise, continue the current streak
+        return [...prevTimes, now];
+      }
+    });
+  };  
+
+  useEffect(() => {
+    if (tapTimes.length > 1) {
+      const intervals = tapTimes.slice(1).map((time, index) => time - tapTimes[index]);
+      const averageInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+      const calculatedBpm = 60000 / averageInterval;
+      setTappedBpm(Math.round(calculatedBpm));
+    }
+  }, [tapTimes]);
+
+  useEffect(() => {
+    setBpm(tappedBpm);
+  }, [tappedBpm]);
 
   useEffect(() => {
     try {
@@ -50,8 +80,13 @@ export default function Home() {
     >
       <div>asdf lol</div>
       <div>again and again</div>
-      <Button>Lorem ipsum</Button>
       <ModeToggle />
+
+      {/* Tap and sync */}
+      <div className="border-2 border-red-400 border-solid p-4 flex gap-1 w-screen max-w-2xl justify-center">
+        <Button onClick={handleTap}>Tap</Button>
+        {/* Tap button will automatically calculate the bpm based on the interval of each clicks. After every last button click, count up to 4 seconds before resetting the interval counter. Update the bpm value at every button click. */}
+      </div>
 
       {/* Input */}
       <div className="border-2 border-red-400 border-solid p-4 flex gap-1 w-screen max-w-2xl justify-center">
@@ -70,7 +105,7 @@ export default function Home() {
             type="number"
             placeholder="128"
             name="inputBpm"
-            defaultValue={bpm}
+            value={bpm}
             onChange={handleBpmChange}
           />
           <InputBpmFps
