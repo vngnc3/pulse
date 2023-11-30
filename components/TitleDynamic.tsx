@@ -3,12 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 
-const shades = ["⃝", "⏺"];
+const shades = ["⏺", "⃝", "⃝", "⃝"];
 const appTitle = "Pulse";
-const intervalMs = 476;
 
-const DynamicTitle = () => {
+interface DynamicTitleProps {
+  bpm: number;
+}
+
+const DynamicTitle = ({ bpm }: DynamicTitleProps) => {
   const [shadeIndex, setShadeIndex] = useState(0);
+
+  // Convert BPM to interval in milliseconds for a quarter beat
+  const intervalMs = bpm > 0 ? (60 / bpm) * 250 : 1000; // Fallback to 1 second if BPM is 0 or negative
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -16,11 +22,11 @@ const DynamicTitle = () => {
     }, intervalMs);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [intervalMs]);
 
   return (
     <Head>
-      <title>{`${appTitle} ${shades[shadeIndex]}`}</title>
+      <title>{`${appTitle} | ${bpm} bpm ${shades[shadeIndex]}`}</title>
     </Head>
   );
 };
