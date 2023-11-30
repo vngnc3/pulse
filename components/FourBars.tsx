@@ -39,4 +39,6 @@ const FourBars = forwardRef((props: FourBarsProps, ref) => {
   return <span>{beats}</span>;
 });
 
+FourBars.displayName = 'FourBars'; // Set the display name here
+
 export default FourBars;
