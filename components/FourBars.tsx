@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   forwardRef,
+  useRef,
 } from "react";
 
 interface FourBarsProps {
@@ -12,24 +13,34 @@ interface FourBarsProps {
 const FourBars = forwardRef((props: FourBarsProps, ref) => {
   const { bpm } = props;
   const [currentBeat, setCurrentBeat] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const on = "🟧";
   const off = "⬛";
 
-  useEffect(() => {
-    if (bpm <= 0) {
-      return;
+  const startInterval = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
     }
-
-    const intervalMs = 60000 / bpm;
-    const interval = setInterval(() => {
+    const intervalMs = bpm > 0 ? 60000 / bpm : 1000;
+    intervalRef.current = setInterval(() => {
       setCurrentBeat((prevBeat) => (prevBeat + 1) % 4);
     }, intervalMs);
+  };
 
-    return () => clearInterval(interval);
+  useEffect(() => {
+    startInterval();
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [bpm]);
 
   useImperativeHandle(ref, () => ({
-    resetBeat: () => setCurrentBeat(0),
+    resetBeat: () => {
+      setCurrentBeat(0);
+      startInterval(); // Restart the interval
+    },
   }));
 
   const beats = Array.from({ length: 4 }, (_, i) =>
@@ -39,6 +50,6 @@ const FourBars = forwardRef((props: FourBarsProps, ref) => {
   return <span>{beats}</span>;
 });
 
-FourBars.displayName = 'FourBars'; // Set the display name here
+FourBars.displayName = "FourBars";
 
 export default FourBars;
