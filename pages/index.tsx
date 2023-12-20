@@ -221,7 +221,7 @@ export default function Home() {
                             ? "Add "
                             : "Remove "}
                           1 frame after every{" "}
-                          {Math.abs(calculateOverflowFrames(framesPerBeat))} frames to
+                          {Math.abs(calculateOverflowFrames(framesPerBeat))} beats to
                           nudge the animation back in sync with the tempo.
                         </p>
                       </TooltipContent>
