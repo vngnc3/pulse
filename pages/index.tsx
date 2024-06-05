@@ -189,7 +189,7 @@ export default function Home() {
 
         {/* Output */}
 
-        <div className="p-4 flex gap-1 w-96 justify-center font-light text-sm">
+        <div className="p-4 pb-6 flex gap-1 w-96 justify-center font-light text-sm">
           <Table>
             <TableBody>
               <TableRow>
@@ -221,8 +221,9 @@ export default function Home() {
                             ? "Add "
                             : "Remove "}
                           1 frame after every{" "}
-                          {Math.abs(calculateOverflowFrames(framesPerBeat))} beats to
-                          nudge the animation back in sync with the tempo.
+                          {Math.abs(calculateOverflowFrames(framesPerBeat))}{" "}
+                          beats to nudge the animation back in sync with the
+                          tempo.
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -238,8 +239,42 @@ export default function Home() {
           </Table>
         </div>
         <Separator className="mb-6" />
-        <div className="text-xs font-light opacity-20 p-6 pb-20">
-          Made by izzy at Bay Team
+        {/* // WIP, generate and download markers for different DCC apps */}
+        {/* <div className="flex flex-col pb-6">
+          Download Markers
+          <Button variant="outline">Blender</Button>
+        </div>
+        <Separator className="mb-6" /> */}
+        <div className="flex flex-col text-xs text-center font-light opacity-50 p-6">
+          <span>
+            <a
+              className="hover:text-orange-500 transition duration-200"
+              href="https://github.com/vngnc3/pulse"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>{" "}
+            /{" "}
+            <a
+              className="hover:text-orange-500 transition duration-200"
+              href="https://x.com/vngnc"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              X
+            </a>
+          </span>
+          <span>
+            <a
+              className="hover:text-orange-500 transition duration-200"
+              href="https://xxxxizzy.xyz/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              xxxxizzy.xyz
+            </a>
+          </span>
         </div>
       </main>
     </>
